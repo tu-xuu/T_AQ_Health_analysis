@@ -11,7 +11,7 @@
 #   exposuredata         - data.frame; must contain "date"
 #   baselinedata_cleaned - data.frame; baseline days (no lag overlap)
 #   originaldatabase     - data.frame; full dataset; must contain:
-#                          date, year, season, dow, RH, holiday, and y
+#                          date, year, season, dow, RH, holiday, month and y
 # Returns:
 #   A data.frame with one row per lag containing:
 #   lag_index, lag_label, estimate (RR), lower, upper, coef, SE,
@@ -34,7 +34,7 @@ Model_func <- function(Y, lagdays, exposuredata, Baselinedata, originaldatabase)
   if (!myY[1] %in% names(originaldatabase)) {
     stop(sprintf("`originaldatabase` must contain the outcome column '%s'.", myY[1]))
   }
-  req_cols <- c("date", "year", "season", "dow", "RH", "holiday")
+  req_cols <- c("date", "year", "season", "dow", "RH", "holiday","month")
   missing_main <- setdiff(req_cols, names(originaldatabase))
   if (length(missing_main) > 0) {
     stop(sprintf("`originaldatabase` is missing required columns: %s", paste(missing_main, collapse = ", ")))
@@ -69,7 +69,7 @@ Model_func <- function(Y, lagdays, exposuredata, Baselinedata, originaldatabase)
     )
     
    
-    need2 <- c(myY[1], "year", "season", "dow", "RH", "holiday", "exposure")
+    need2 <- c(myY[1], "year", "season", "dow", "RH", "holiday", "exposure"，"month")
     miss2 <- setdiff(need2, names(model_data))
     if (length(miss2) > 0) {
       stop(sprintf("`model_data` is missing required columns: %s", paste(miss2, collapse = ", ")))
@@ -77,11 +77,12 @@ Model_func <- function(Y, lagdays, exposuredata, Baselinedata, originaldatabase)
     
    
     model_data$stratum <- as.factor(paste(model_data$year, model_data$season, model_data$dow, sep = ":"))
-    keep_cols <- c(myY, "stratum", "exposure", "RH", "holiday")
+    model_data$month <- as.factor(model_data$month)
+    keep_cols <- c(myY, "stratum", "exposure", "RH", "holiday","month")
     model_data <- model_data[, keep_cols]
     
   
-    fml <- stats::as.formula(paste0(myY[1], " ~ exposure+splines::ns(RH,3)+holiday"))
+    fml <- stats::as.formula(paste0(myY[1], " ~ exposure+splines::ns(RH,3)+holiday+month"))
     
    
     model_cpoisson <- try(
