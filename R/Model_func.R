@@ -159,8 +159,8 @@ Model_func <- function(Y, lagdays, exposuredata, Baselinedata, originaldatabase)
     data_exp[i + 1, "lower"]       <- a[1]
     data_exp[i + 1, "AF"]          <- (exp(beta) - 1) / exp(beta)
    
-    data_exp[i + 1, "AF_upper"]    <- (a[1] - 1) / a[1]
-    data_exp[i + 1, "AF_lower"]    <- (a[2] - 1) / a[2]
+    data_exp[i + 1, "AF_lower"] <- (a[1] - 1) / a[1]
+    data_exp[i + 1, "AF_upper"] <- (a[2] - 1) / a[2]
     
    
     if ("exposure" %in% rownames(vcov_matrix) && "exposure" %in% colnames(vcov_matrix)) {
