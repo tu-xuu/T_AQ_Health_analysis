@@ -26,9 +26,9 @@ invisible(lapply(r_files, source, encoding = "UTF-8"))
 db <- readRDS(data_path)
 # --- 4) Run analysis ---
 res <- single_co_exposure_func_PM25(
-  areaname = 'London',Y='totdeath',
-  db
-  
+  areaname = area,
+  Y = y_var,
+  inputdata = db
 )
 
 
