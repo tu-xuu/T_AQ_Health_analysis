@@ -69,7 +69,7 @@ Model_func <- function(Y, lagdays, exposuredata, Baselinedata, originaldatabase)
     )
     
    
-    need2 <- c(myY[1], "year", "season", "dow", "RH", "holiday", "exposure"，"month")
+    need2 <- c(myY[1], "year", "season", "dow", "RH", "holiday", "exposure","month")
     miss2 <- setdiff(need2, names(model_data))
     if (length(miss2) > 0) {
       stop(sprintf("`model_data` is missing required columns: %s", paste(miss2, collapse = ", ")))
